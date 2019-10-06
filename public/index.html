@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Web worker</title>
+  </head>
+  <body>
+    <script>
+      let worker
+      function startCompute() {
+        if(window.Worker) {
+          console.log('workers are available')
+
+          document.getElementById("loadingText").style = "visibility:visible"
+          document.getElementById("onClick").style = "visibility:hidden"
+
+          worker = new Worker('worker.js')
+          worker.postMessage({ message: 0.1})
+          
+          worker.onmessage = event => {
+            document.getElementById("totalTime").innerHTML = event.data.message + "   seconds"
+            document.getElementById("onClick").style = "visibility:visible"
+            document.getElementById("loadingText").style = "visibility:hidden"
+            worker.terminate()
+          }
+        }
+      }
+    </script>
+    <h1 id="loadingText" style="visibility:hidden">Waiting for data</h1>
+    <p id="totalTime"></p>
+    <button onclick="startCompute()" id="onClick">Click me!</button>
+  </body>
+</html>
