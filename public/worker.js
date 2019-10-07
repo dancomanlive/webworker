@@ -1,5 +1,4 @@
 const array = []
-let totalTime = 0
 let limit = 10
 
 onmessage = event =>  {
@@ -35,11 +34,11 @@ onmessage = event =>  {
     binaryInsert(event.data.randomNr, array)
     const end = performance.now()
     time = (end - start) / 1000
-    totalTime += time
     console.log(array.length)
-    console.log(array)
+    // console.log(array)
+    self.postMessage({ time })
     if(array.length === limit) {
-      self.postMessage({ totalTime })
+      self.postMessage({ message: "complete" })
     }
   }
 }

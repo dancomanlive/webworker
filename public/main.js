@@ -1,7 +1,7 @@
 let worker
 let totalTime = 0
-let miliseconds = 100
-let limit = 10
+let miliseconds = 1
+let limit = 100000
 
 function startCompute() {
 
@@ -22,14 +22,17 @@ function startCompute() {
     }, miliseconds)
     
     worker.onmessage = event => {
-      if (event.data.totalTime) {
-        console.log("TotalTime", event.data.totalTime, 'seconds')
-        document.getElementById("totalTime").innerHTML = event.data.totalTime + "   seconds"
+      if (event.data.message === "complete") {
+        console.log("TotalTime", totalTime, 'seconds')
+        document.getElementById("totalTime").innerHTML = totalTime + "   seconds"
         document.getElementById("onClick").style = "visibility:visible"
         document.getElementById("textInput").style = "visibility:visible"
         document.getElementById("loadingText").style = "visibility:hidden"
         clearInterval(t)
         worker.terminate()
+      } else if (event.data.time) {
+        const { time } = event.data
+        totalTime += time
       }
     }
   }
